@@ -1,0 +1,25 @@
+language: java
+jdk:
+  - openjdk17 # Використовуємо OpenJDK 17
+
+# Встановлення залежностей
+install:
+  - mvn install # Встановлюємо залежності проекту
+
+# Запуск тестів
+script:
+  - mvn clean test # Запускаємо тести
+  - echo "Tests completed with exit code $?" >> results.log
+
+# Додаткові кроки для Terraform
+after_success:
+  - export GOOGLE_CREDENTIALS=$(cat ./my-project-436711-060922fb417d.json) # Встановлюємо змінну середовища
+  - terraform init # Ініціалізація Terraform
+  - terraform validate # Перевірка конфігурацій
+  - terraform plan # Генерація плану
+  - terraform apply -auto-approve # Застосування плану
+
+# Додаємо секцію для налаштування середовища
+env:
+  global:
+    - GOOGLE_CREDENTIALS_PATH=./my-project-436711-060922fb417d.json # Шлях до JSON-файлу з обліковими даними
