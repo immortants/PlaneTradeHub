@@ -14,7 +14,7 @@ script:
   - mvn clean test
   - echo "Tests completed with exit code $?" >> results.log
 
-after_success:
+after_script:
   - export GOOGLE_CREDENTIALS=$(cat ./my-project-436711-060922fb417d.json) # Встановлюємо змінну середовища
   - terraform init
   - terraform validate
