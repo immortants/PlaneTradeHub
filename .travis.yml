@@ -2,6 +2,13 @@ language: java
 jdk:
   - openjdk17 # Використовуємо OpenJDK 17
 
+# Завантаження та установка Terraform
+before_install:
+  - curl -o terraform.zip https://releases.hashicorp.com/terraform/1.3.0/terraform_1.3.0_linux_amd64.zip
+  - unzip terraform.zip
+  - sudo mv terraform /usr/local/bin/
+  - terraform -version # Перевірка версії Terraform
+
 # Встановлення залежностей
 install: true
 
@@ -17,3 +24,8 @@ after_success:
   - terraform validate # Перевірка конфігурацій
   - terraform plan # Генерація плану
   - terraform apply -auto-approve # Застосування плану
+  - terraform destroy -auto-approve # Знищення ресурсів у разі помилки
+
+# Виконати деструкцію після завершення
+after_failure:
+  - terraform destroy -auto-approve # Знищення ресурсів у разі помилки
