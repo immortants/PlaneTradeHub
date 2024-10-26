@@ -18,14 +18,9 @@ script:
   - echo "Tests completed with exit code $?" >> results.log
 
 # Додаткові кроки для Terraform
-after_success:
+after_script:
   - export GOOGLE_CREDENTIALS=$(cat ./my-project-436711-060922fb417d.json) # Встановлюємо змінну середовища
   - terraform init # Ініціалізація Terraform
   - terraform validate # Перевірка конфігурацій
   - terraform plan # Генерація плану
   - terraform apply -auto-approve # Застосування плану
-
-# Виконати деструкцію після завершення
-after_failure:
-  - terraform init # Оновлення блокування залежностей
-  - terraform destroy -auto-approve # Знищення ресурсів у разі помилки
