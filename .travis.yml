@@ -24,8 +24,8 @@ after_success:
   - terraform validate # Перевірка конфігурацій
   - terraform plan # Генерація плану
   - terraform apply -auto-approve # Застосування плану
-  - terraform destroy -auto-approve # Знищення ресурсів у разі помилки
 
 # Виконати деструкцію після завершення
 after_failure:
+  - terraform init # Оновлення блокування залежностей
   - terraform destroy -auto-approve # Знищення ресурсів у разі помилки
