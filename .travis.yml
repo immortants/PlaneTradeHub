@@ -3,8 +3,7 @@ jdk:
   - openjdk17 # Використовуємо OpenJDK 17
 
 # Встановлення залежностей
-install:
-  - mvn install # Встановлюємо залежності проекту
+install: true
 
 # Запуск тестів
 script:
