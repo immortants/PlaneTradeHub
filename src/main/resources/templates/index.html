@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{page.title.index}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myAdvertisements.css}" />
+</head>
+<body>
+
+<header th:replace="~{/fragments/header :: header}"></header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="container">
+                <span th:text="#{index.label.types}"/>
+                <th:block th:each="type:${types}">
+                    <div class="row">
+                        <a th:href="@{/advertisements(type=${type.name}, manufacturer='', model='')}">
+                            <span th:text="${type.name}"/>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+            <div class="container">
+                <span th:text="#{index.label.manufacturers}"/>
+                <th:block th:each="manufacturer:${manufacturers}">
+                    <div class="row">
+                        <a th:href="@{/advertisements(type='', manufacturer=${manufacturer.name}, model='')}">
+                            <span th:text="${manufacturer.name}"/>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="advertisement-card" th:each="advertisement:${advertisements}">
+                            <h4 class="front-weight-bold blue-text">
+                                <a th:href="@{/advertisements/{id}(id=${advertisement.id})}" class="text-decoration-none">
+                                    <strong>
+                                        <span th:text="${advertisement.aircraft.manufacturer}"/>
+                                        <span th:text="${advertisement.aircraft.model}"/>
+                                        <span th:text="${advertisement.aircraft.year}"/>
+                                    </strong>
+                                </a>
+                            </h4>
+                            <img th:src="@{/{advertisementId}/image/{imageId}(advertisementId=${advertisement.id}, imageId=${advertisement.images[0].id})}" class="img-thumbnail" alt="Product Image"> <br/>
+                            <strong>
+                                <span th:text="#{index.label.run}"/> <span th:text="${advertisement.aircraft.run}"/> <br/>
+                                <span th:text="#{index.label.price}"/> <span th:text="${advertisement.price} + '$'"/> <br/>
+                                <span th:text="#{index.label.city}"/> <span th:text="${advertisement.city}"/> <br/>
+                            </strong>
+                            <span th:text="${advertisement.publicationDate}"/> <br/>
+                            <a th:href="@{/myAdvertisement/{id}(id=${advertisement.id})}" class="btn btn-primary">
+                                <strong><span th:text="#{advertisement.button.update}"></span></strong>
+                            </a>
+                            <a th:href="@{/myAdvertisements/{id}(id=${advertisement.id})}" class="btn btn-danger">
+                                <strong><span th:text="#{advertisement.button.delete}"></span></strong>
+                            </a>
+                        </div>
+                        <div th:if="${advertisements.totalPages > 1}" class="pagination">
+                            <div th:each="pageNumber, iterStat : ${pageNumbers}">
+                                <a th:href="@{/(type=${type}, manufacturer=${manufacturer}, size=${advertisements.size}, page=${pageNumber})}"
+                                   th:text="${pageNumber}"
+                                   th:class="${pageNumber == advertisements.number + 1} ? 'active' : ''"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{/fragments/footer :: footer}"></footer>
+
+</body>
+</html>

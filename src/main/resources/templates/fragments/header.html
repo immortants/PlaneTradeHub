@@ -1,0 +1,47 @@
+<header class="p-3 text-bg-dark" xmlns:th="https://www.thymeleaf.org"
+        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a th:href="@{/}" class="nav-link px-2 text-white" th:text="#{header.label.home}"></a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}" class="nav-link px-2 text-white"
+                                                         th:text="#{header.label.profile}"></a></li>
+                <li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/aircrafts}" class="nav-link px-2 text-white"
+                                                             th:text="#{header.label.aircrafts}"></a></li>
+            </ul>
+
+            <div class="text-end">
+                <div sec:authorize="!isAuthenticated()">
+                    <button type="button" class="btn btn-outline-light me-2"
+                            th:onclick="|window.location.href='@{/login}'|" th:text="#{header.button.login}"></button>
+                    <button type="button" class="btn btn-warning" th:onclick="|window.location.href='@{/signUp}'|"
+                            th:text="#{header.button.signUp}"></button>
+                </div>
+
+                <div sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                        <button class="btn btn-outline-light me-2" type="submit"
+                                th:text="#{header.button.logout}"></button>
+                    </form>
+                </div>
+            </div>
+            &nbsp;&nbsp;
+            <select id="locales" class="language-select dropdown-toggle btn btn-outline-light me-3">
+                <option value="en" th:text="#{lang.en}" th:selected="${#locale.language == 'en'}"></option>
+                <option value="uk" th:text="#{lang.uk}" th:selected="${#locale.language == 'uk'}"></option>
+            </select>
+        </div>
+    </div>
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#locales").change(function () {
+                var selectedOption = $('#locales').val();
+                if (selectedOption != '') {
+                    window.location.replace('?lang=' + selectedOption);
+                }
+            });
+        });
+    </script>
+</header>
+
